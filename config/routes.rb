@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  get 'toppages/index'
+  root to: "tasks#index"
+  get 'login', to: 'sessions#new'
+  post 'login', to: 'sessions#create'
+  delete 'logout', to: 'sessions#destroy'
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  #元の文章root to: 'tasks#index'
-  #元の文章resources :tasks
-  root to: 'toppages#index'
+  get 'signup', to: 'users#new'
+  resources :users, only: [:create]
+  resources :tasks
 end

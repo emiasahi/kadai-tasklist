@@ -1,19 +1,24 @@
 class TasksController < ApplicationController
+  before_action :require_user_logged_in
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :check_user, only: [:show, :edit, :update, :destroy]
   
   def index
-    @tasks = Task.all
+    @tasks = current_user.tasks
   end
   
   def show
   end
   
   def new
+    # @task = current_user.tasks.build
     @task = Task.new
+    @task.user = current_user
   end
   
   def create
     @task = Task.new(task_params)
+    @task.user = current_user
     
     if @task.save       
       flash[:success] = 'タスクが正常に投稿されました'
@@ -47,9 +52,15 @@ class TasksController < ApplicationController
   private
   # Strong Parameter
   def set_task
-    @task = Task.find(params[:id])
+    # データが無い場合にはnilを返す
+    @task = Task.find_by(id: params[:id])
   end
-
+  def check_user
+    # correct_userというメソッドでカリキュラムでは書いている。
+    if @task.blank? or @task.user != current_user
+      redirect_to root_url
+    end
+  end
   def task_params
     params.require(:task).permit(:content, :status)
   end

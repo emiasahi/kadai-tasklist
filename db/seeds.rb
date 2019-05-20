@@ -7,5 +7,5 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 (1..100).each do |number|
-    Message.create(title: 'test title　' + number.to_s, content: 'test content　' + number.to_s)
+   Task.create!(content: 'test　' + number.to_s, status: 'done　' + number.to_s,user: User.first)
 end
